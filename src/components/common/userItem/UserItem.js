@@ -1,12 +1,15 @@
 import React from 'react';
+import { Row , Button} from 'react-bootstrap';
 
 const UserItem = (props) => {
   return(
-    <div>
-      <h4 onClick={props.toggleConv}>{props.username}</h4>
-      <button onClick={props.deleteButon}>delete</button>
-      <button onClick={props.newButton}>new conversation</button>
-    </div>
+    <Row>
+      <div className="mr-auto justify-content-center" onClick={props.toggleConv}>
+        <h5>{props.username}</h5>
+      </div>
+      <Button className="" onClick={props.deleteButon}>delete</Button>
+      <Button className="ml-2" onClick={props.newButton}>new</Button>
+    </Row>
   );
 }
 

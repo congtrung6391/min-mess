@@ -10,3 +10,8 @@ export {
   sendMessage,
   convUpdate,
 } from './conv';
+
+export {
+  getAllConvs,
+  allConvsUpdate,
+} from './allConvs';

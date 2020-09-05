@@ -5,3 +5,7 @@ export const CONV_START = "CONVSTART";
 export const CONV_SUCCESS = "CONVSUCCESS";
 export const CONV_UPDATE = "CONVUPDATE";
 export const CONV_FAIL = "CONVFAIL";
+export const ALL_CONVS_START = "CONVSSTART";
+export const ALL_CONVS_SUCCESS = "CONVSSUCCESS";
+export const ALL_CONVS_UPDATE = "CONVSUPDATE";
+export const ALL_CONVS_FAIL = "CONVSFAIL";

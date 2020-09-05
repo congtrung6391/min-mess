@@ -4,34 +4,43 @@ import NavItem from '../../common/navItem/NavItem';
 import * as actions from '../../../config/store/actions/auth';
 import * as routerPath from '../../../config/router';
 import { SocketContext } from '../../../context/context';
-import styles from '../../../styles/styles.module.css';
+import { Navbar } from 'react-bootstrap';
+import logo from '../../../images/pngegg.png';
 
 const Navigation = ( props ) => {
   const socket = useContext(SocketContext);
+
   let navItems = (
     <div>
       <NavItem path={routerPath.LOGIN}>Login</NavItem>
       <NavItem path={routerPath.REGISTER}>Register</NavItem>
     </div>
   );
+
   if (props.user) {
     console.log("[update user] " + props.user);
-    if(props.user) {
+    if(props.user) 
       socket.emit('join', props.user);
-    }
+
     navItems = (
       <div>
         <NavItem path={`/${props.user}`}>{props.user}</NavItem>
-        <NavItem path="/" clicked={props.onLogout}>Log out</NavItem>
+        <NavItem path="/logout" clicked={props.onLogout}>Log out</NavItem>
       </div>
     );
   }
-  // console.log(props.user);
 
   return (
-    <div className={styles.navigation}>
+    <Navbar className="justify-content-between shadow-sm">
+      <Navbar.Brand href="/">
+        <img
+          src={logo} 
+          alt="Green mail logo"
+          height="40px"
+        />
+      </Navbar.Brand>
       {navItems}
-    </div>
+    </Navbar>
   );
 }
 

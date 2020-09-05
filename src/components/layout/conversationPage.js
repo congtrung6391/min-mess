@@ -4,7 +4,7 @@ import Conversation from '../views/conversation/Conversation';
 
 const ConversationPage = (props) => {
   return (
-    <div>
+    <div className="d-flex justify-content-center">
       <SearchPanel />
       <Conversation />
     </div>

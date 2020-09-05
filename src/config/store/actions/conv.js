@@ -30,26 +30,6 @@ export const convFail = (error) => {
   }
 }
 
-export const getAllConv = () => {
-  const token = JSON.parse(localStorage.getItem("tokens"));
-  return dispatch => {
-    dispatch(convStart());
-    axios({
-      method: "GET", 
-      url: routeTypes.GET_ALL_CONV,
-      headers: {
-        'Authorization': token
-      }
-    })
-      .then((response) => {
-        dispatch(convSuccess(response.data));
-      })
-      .catch((error) => {
-        dispatch(convFail(error));
-      });
-  }
-}
-
 export const searchUsernameAPI = (peername) => {
   return dispatch => {
   axios({
@@ -123,7 +103,7 @@ export const createConv = (peername) => {
   }
 }
 
-export const sendMessage = (peername, message) => {
+export const sendMessage = (peername, sender, message) => {
   const token = JSON.parse(localStorage.getItem("tokens"));
   return async (dispatch) => {
     //try {
@@ -133,6 +113,7 @@ export const sendMessage = (peername, message) => {
         url: "/conversation/message",
         data: {
           receiver: peername,
+          sender: sender,
           content: message,
         },
         headers: {
@@ -140,13 +121,10 @@ export const sendMessage = (peername, message) => {
         }
       })
         .then(response => {
-          dispatch(convUpdate({content: message}));
+          dispatch(convUpdate({sender: sender, content: message}));
         })
         .catch(error => {
           dispatch(convFail(error));
         });
-    // } catch (error) {
-    //   console.log(error);
-    // }
   }
 }

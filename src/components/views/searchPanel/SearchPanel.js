@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../../config/store/actions/index';
 import * as actionsType from '../../../config/store/actions/actionsType';
 import * as routeTypes from '../../../config/router';
-import Input from '../../common/input/Input';
 import UserItem from '../../common/userItem/UserItem';
+import { InputGroup, FormControl, Button, ListGroup } from 'react-bootstrap';
 
 class SearchPanel extends React.Component {
   constructor(props) {
@@ -13,86 +13,31 @@ class SearchPanel extends React.Component {
     this.state = {
       userOnSearch: null,
       foundUser: null,
-      allConv: [],
+      stateConvs: [],
       error: null,
     }
   }
 
-  componentDidMount() {
-    const token = JSON.parse(localStorage.getItem("tokens"));
-    // console.log("[Token will be sent] " + token);
-    axios({
-      method: "GET", 
-      url: routeTypes.GET_ALL_CONV,
-      headers: {
-        'Authorization': token
-      }
-    })
-      .then((response) => {
-        // console.log("[response] ");
-        const data = JSON.parse(response.data);
-        // console.log(data);
-        const username = JSON.parse(localStorage.getItem("username"));
-        const convs = data.map(conv => {
-          const peername = (conv.convUser_1.username === username
-                            ? conv.convUser_2.username
-                            : conv.convUser_1.username);
-          return {
-            createdAt: conv.createdAt,
-            peername: peername,
-            content: conv.messages,
-          }
-        });
-        // console.log("[convs] ");
-        // console.log(convs);
-        this.setState({allConv: convs});
-      })
-      .catch((error) => {
-        this.setState({error});
-      });
+  componentDidMount = async () => {
+    console.log("[search mounted]");
+    await this.props.onGetAll();
+    const propsConvs = this.props.convs;
+    this.setState({stateConvs: propsConvs});
   }
 
   deleteConversation = (event, peerName) => {
-    // event.preventDefault();
-    // console.log("[peername delete recieved] " + peerName);
+    event.preventDefault();
     this.props.onDelete(peerName);
-    
   }
 
   createNewConversation = (event, peerName) => {
-    // event.preventDefault();
-    // console.log("[peername create recieved] " + peerName);
+    event.preventDefault();
     this.props.onCreate(peerName);
   }
 
   toggleConversation = (event, conv) => {
-    this.props.onToggle(conv);
-  }
-
-  onChangeHandler = (event) => {
     event.preventDefault();
-    this.setState({
-      userOnSearch: event.target.value,
-      foundUser: false
-    });
-    axios({
-      method: "GET",
-      url: "user/" + event.target.value,
-      params: {
-        username: event.target.value
-      }
-    })
-      .then(response => {
-        this.setState({
-          foundUser: true,
-          allConv: [{
-            peername: this.state.userOnSearch
-          }]
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    this.props.onToggle(conv);
   }
 
   onSubmitHandler = (event) => {
@@ -102,17 +47,27 @@ class SearchPanel extends React.Component {
     });
     axios({
       method: "GET",
-      url: "/user/" + this.state.userOnSearch,
+      url: "/user/" + event.target.value,
       params: {
-        username: this.state.userOnSearch
+        username: event.target.value
       }
     })
       .then(response => {
+        console.log("found");
+        let convs = this.props.convs.find((conv) => conv.peername === this.state.userOnSearch );
+        convs = [convs]
+        console.log(convs);
+        if(!convs) {
+          convs = [{
+            peername: this.state.userOnSearch,
+            createdAt: "not yet handler",
+            content: [],
+          }];
+        }
+
         this.setState({
           foundUser: true,
-          allUsers: [{
-            peername: this.state.userOnSearch
-          }]
+          stateConvs: convs,
         });
       })
       .catch(error => {
@@ -120,32 +75,48 @@ class SearchPanel extends React.Component {
       })
   }
 
+  onChangeHandler = (event) => {
+    event.preventDefault();
+    if(event.target.value === "") {
+      this.props.onGetAll();
+      const propsConvs = this.props.convs;
+      this.setState({stateConvs: propsConvs});
+    } else {
+      this.setState({userOnSearch: event.target.value});
+      this.onSubmitHandler(event);
+    }
+  }
+
   render() {
-    const { allConv } = this.state;
-    const usersArr = allConv.map(conv => {
+    const { stateConvs } = this.state;
+    const usersArr = stateConvs.map(conv => {
       return (
-        <UserItem 
-          username={conv.peername} 
-          toggleConv={(event) => this.toggleConversation(event, conv)}
-          newButton={(event) => this.createNewConversation(event, conv.peername)}
-          deleteButon={(event) => this.deleteConversation(event, conv.peername)}
-          key={conv.peername}
-        />
+        <ListGroup.Item key={conv.peername}>
+          <UserItem 
+            username={conv.peername} 
+            toggleConv={(event) => this.toggleConversation(event, conv)}
+            newButton={(event) => this.createNewConversation(event, conv.peername)}
+            deleteButon={(event) => this.deleteConversation(event, conv.peername)}
+          />
+        </ListGroup.Item>
       );
     })
     // console.log(this.props.peername);
     return (
-      <div>
-        <form onSubmit={(event) => this.onSubmitHandler(event)}>
-          <Input 
-            type="search" 
-            label="Search for a user" 
-            placeholder="username"
-            changed={(event) => this.onChangeHandler(event)}
+      <div className="col-md-3 my-4 p-3 border rounded shadow-sm" style={{minHeight: "85vh"}}>
+        <InputGroup>
+          <FormControl
+            placeholder="Search a user"
+            type="search"
+            onChange={(event) => this.onChangeHandler(event)}
           />
-          <button onClick={(event) => this.onSubmitHandler(event)}>Search</button>
-        </form>
-        {usersArr}
+          <InputGroup.Prepend>
+            <Button onClick={(event) => this.onSubmitHandler(event)}>Search</Button>
+          </InputGroup.Prepend>
+        </InputGroup>
+        <ListGroup className="mt-4">
+          {usersArr}
+        </ListGroup>
       </div>
     );
   }
@@ -153,7 +124,8 @@ class SearchPanel extends React.Component {
 
 const mapStateProps = (state) => {
   return {
-    peername: state.conv.peername
+    peername: state.conv.peername,
+    convs: state.allConvs.convs,
   }
 }
 const mapDispatchProp = (dispatch) => {
@@ -161,6 +133,7 @@ const mapDispatchProp = (dispatch) => {
     onCreate: (peername) => dispatch(actions.createConv(peername)),
     onDelete: (peername) => dispatch(actions.deleteConv(peername)),
     onToggle: (data) => dispatch({type: actionsType.CONV_SUCCESS, data: data}),
+    onGetAll: () => dispatch(actions.getAllConvs()),
   }
 }
 

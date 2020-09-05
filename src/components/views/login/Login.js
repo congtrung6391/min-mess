@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../config/store/actions/auth';
-import Input from '../../common/input/Input';
+import InputForm from '../../common/input/InputForm';
 import { Redirect } from 'react-router-dom';
+import { Form, Button } from 'react-bootstrap';
 
 class Login extends React.Component {
   constructor(props) {
@@ -25,7 +26,9 @@ class Login extends React.Component {
     this.setState(newState);
   }
 
-  submitHandler = async () => {
+  submitHandler = async (event) => {
+    event.preventDefault();
+    console.log("[login]");
     const { username, password } = this.state;
     const data={
       username,
@@ -45,27 +48,32 @@ class Login extends React.Component {
     let control = null;
     // console.log(this.props.error);
     if(this.props.error) {
-      control = <p>{this.props.error}</p>;
+      control = <p className="text-danger">{this.props.error}</p>;
     } else if(this.props.user) {
       control = <Redirect to="/" />
     }
     return (
-      <form onSubmit={this.submitHandler}>
-        <Input 
+      <Form onSubmit={(event) => this.submitHandler(event)} className="col-md-4 col-sm-5 mx-auto mt-5 p-4 border rounded shadow-sm">
+        <div className="d-flex justify-content-center block m-3">
+          <h3 className="font-weight-bold">Login</h3>
+        </div>
+        <InputForm 
+          controlID="usernameForm"
           type="text" 
-          name="Username" 
-          placeholder="Username"
+          label="Username" 
+          placeholder="username"
           changed={(event) => this.inchangedHandler(event, 'username')}
         />
-        <Input 
+        <InputForm
+          controlID="passwordForm"
           type="password" 
-          name="Password"
-          placeholder="Your password"
+          label="Password"
+          placeholder="password"
           changed={(event) => this.inchangedHandler(event, 'password')}
         />
+        <Button className="mt-4" block type="submit">Login</Button>
         {control}
-        <button type="button" onClick={this.submitHandler}>Login</button>
-      </form>
+      </Form>
     );
   }
 }

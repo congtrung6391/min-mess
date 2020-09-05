@@ -10,7 +10,7 @@ class App extends React.Component {
     if(existingTokens) {
       this.props.onAuth(existingTokens, existingUsername);
     }
-  }
+  } 
 
   render() {
     return (

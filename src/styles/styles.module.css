@@ -1,3 +1,12 @@
+.messageLeft {
+  background-color: red;
+  max-width: 400px;
+}
+.messageRight {
+  background-color: blue;
+  max-width: 400px;
+}
+
 .authBox {
   width: 500px;
   min-height: 300px;
@@ -19,15 +28,16 @@
 }
 
 .NavLink {
-  color: white;
+  color: black;
   height: 100%;
-  font-size: 20px;
+  font-size: 18px;
   text-decoration: none;
   margin: auto;
   padding: 10px;
 } 
 .NavLink:hover {
   color: orange;
+  text-decoration: none;
 }
 .NavLinkActive {
   color: red;
