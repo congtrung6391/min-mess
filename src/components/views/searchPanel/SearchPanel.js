@@ -3,7 +3,6 @@ import axios from '../../../config/axios/axios';
 import { connect } from 'react-redux';
 import * as actions from '../../../config/store/actions/index';
 import * as actionsType from '../../../config/store/actions/actionsType';
-import * as routeTypes from '../../../config/router';
 import UserItem from '../../common/userItem/UserItem';
 import { InputGroup, FormControl, Button, ListGroup } from 'react-bootstrap';
 
@@ -53,10 +52,10 @@ class SearchPanel extends React.Component {
       }
     })
       .then(response => {
-        console.log("found");
+        // console.log("found");
         let convs = this.props.convs.find((conv) => conv.peername === this.state.userOnSearch );
         convs = [convs]
-        console.log(convs);
+        // console.log(convs);
         if(!convs) {
           convs = [{
             peername: this.state.userOnSearch,
@@ -71,7 +70,7 @@ class SearchPanel extends React.Component {
         });
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
       })
   }
 

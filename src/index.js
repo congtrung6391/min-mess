@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import socketIOClient from "socket.io-client";
+import { CookiesProvider } from 'react-cookie';
 
 import App from './App';
 import authReducer from './config/store/reducer/authReducer';
@@ -27,13 +28,15 @@ const store = createStore(rootReducer, composeEnhancers(
 const socket = socketIOClient('http://localhost:3002/');
 
 const app = (
-    <SocketContext.Provider value={socket}>
-        <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Provider>
-    </SocketContext.Provider>
+    <CookiesProvider>
+        <SocketContext.Provider value={socket}>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </Provider>
+        </SocketContext.Provider>
+    </CookiesProvider>
 );
 
 ReactDOM.render( app, document.getElementById( 'root' ) );

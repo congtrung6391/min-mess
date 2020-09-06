@@ -1,6 +1,9 @@
 import axios from '../../axios/axios';
 import * as actionsType from './actionsType';
 import * as routeTypes from '../../router';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 export const allConvsStart = () => {
   return {
@@ -30,8 +33,9 @@ export const allConvsFail = (error) => {
 }
 
 export const getAllConvs = () => {
-  const token = JSON.parse(localStorage.getItem("tokens"));
-  console.log("[token will be sent in delete] " + token);
+  // const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  // console.log("[token will be sent in delete] " + token);
   return async (dispatch) => {
     dispatch(allConvsStart());
     await axios({
@@ -43,7 +47,8 @@ export const getAllConvs = () => {
     })
       .then((response) => {
         const data = JSON.parse(response.data);
-        const username = JSON.parse(localStorage.getItem("username"));
+        // const username = JSON.parse(localStorage.getItem("username"));
+        const username = cookies.get("username");
         const convs = data.map(conv => {
           const peername = (conv.convUser_1.username === username
                             ? conv.convUser_2.username

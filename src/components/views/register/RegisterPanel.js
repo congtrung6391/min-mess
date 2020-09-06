@@ -22,13 +22,17 @@ class Login extends React.Component {
     this.setState(newState);
   }
 
-  submitHandler = () => {
+  submitHandler = async (event) => {
+    event.preventDefault();
     const { username, password } = this.state;
     const data={
       username,
       password
     }
-    this.props.onRegister(data);
+    await this.props.onRegister(data);
+    if(this.props.error) {
+      this.setState({error: this.props.error});
+    }
   }
 
   render() {

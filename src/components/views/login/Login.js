@@ -35,13 +35,9 @@ class Login extends React.Component {
       password
     }
     await this.props.onLogin(data);
-    // console.log("[Log in login submit] " + this.props.error);
-    // console.log("[Log in login submit] " + this.props.user);
-    // console.log("[Log in login submit] " + this.props.loading);
     if(this.props.error) {
       this.setState({error: this.props.error});
     }
-    // console.log(this.state.error);
   }
 
   render() {

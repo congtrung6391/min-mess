@@ -7,7 +7,7 @@ const initialState = {
 }
 
 const allConvsStart = (state, action) => {
-  console.log("[Red start]");
+  // console.log("[Red start]");
   return {
     ...state,
     loading: true,
@@ -16,7 +16,7 @@ const allConvsStart = (state, action) => {
 }
 
 const allConvsSucces = (state, action) => {
-  console.log("[Red success]");
+  // console.log("[Red success]");
   return {
     ...state,
     loading: false,
@@ -26,7 +26,7 @@ const allConvsSucces = (state, action) => {
 }
 
 const allConvsUpdate = (state, action) => {
-  console.log("[Red update]");
+  // console.log("[Red update]");
   // console.log(state);
   const { convs } = state;
   // console.log(content);
@@ -40,7 +40,7 @@ const allConvsUpdate = (state, action) => {
 }
 
 const allConvsFail = (state, action) => {
-  console.log("[Red fail]");
+  // console.log("[Red fail]");
   return {
     ...state,
     convs: [],

@@ -18,7 +18,7 @@ const Navigation = ( props ) => {
   );
 
   if (props.user) {
-    console.log("[update user] " + props.user);
+    // console.log("[update user] " + props.user);
     if(props.user) 
       socket.emit('join', props.user);
 

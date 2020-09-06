@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useCookies } from 'react-cookie';
+
 import Layout from './components/layout/Layout';
 import * as actionsType from './config/store/actions/actionsType';
 
-class App extends React.Component {
-  componentDidMount() {
-    const existingTokens = JSON.parse(localStorage.getItem("tokens"));
-    const existingUsername = JSON.parse(localStorage.getItem("username"));
-    if(existingTokens) {
-      this.props.onAuth(existingTokens, existingUsername);
-    }
-  } 
 
-  render() {
-    return (
-      <div>
-        <Layout />
-      </div>
-    );
+
+const App = (props) => {
+  const [cookies] = useCookies(['tokens', 'username']);
+  console.log(cookies);
+
+  useEffect( () => {
+    const existingTokens = cookies["tokens"];
+    const existingUsername = cookies["username"];
+    const fecthLogin = async () => {
+      await props.onAuth(existingTokens, existingUsername);
+    };
+    if(existingTokens) {
+      fecthLogin();
+      if(props.error) {
+        console.log(props.error);
+      }
+    }
+  });
+
+  return (
+    <div>
+      <Layout />
+    </div>
+  );
+}
+
+const mapStateProps = state => {
+  return {
+    error: state.auth.error
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (token, username) => dispatch({type: actionsType.AUTH_SUCCESS, token: token, username: username})
+    onAuth: async (token, username) => dispatch({type: actionsType.AUTH_SUCCESS, token: token, username: username})
   }
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateProps, mapDispatchToProps)(App);

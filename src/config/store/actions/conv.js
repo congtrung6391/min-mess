@@ -1,6 +1,9 @@
 import axios from '../../axios/axios';
 import * as actionsType from './actionsType';
 import * as routeTypes from '../../router';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 export const convStart = () => {
   return {
@@ -16,7 +19,7 @@ export const convSuccess = (data) => {
 }
 
 export const convUpdate = (message) => {
-  console.log(message);
+  // console.log(message);
   return {
     type: actionsType.CONV_UPDATE,
     message: message,
@@ -53,9 +56,9 @@ export const searchUsernameAPI = (peername) => {
 }
 
 export const deleteConv = (peerName) => {
-  const token = JSON.parse(localStorage.getItem("tokens"));
-  console.log("[token will be sent in delete] " + token);
-  console.log(peerName);
+  // const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  console.log("[Conversaiton will be deleted] " + peerName);
   return dispatch => {
     dispatch(convStart());
     axios({
@@ -67,6 +70,7 @@ export const deleteConv = (peerName) => {
       }
     })
       .then((response) => {
+        console.log("[Response]");
         console.log(response);
         dispatch(convFail(null));
       })
@@ -77,7 +81,8 @@ export const deleteConv = (peerName) => {
 }
 
 export const createConv = (peername) => {
-  const token = JSON.parse(localStorage.getItem("tokens"));
+  // const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = cookies.get("tokens", {path: routeTypes.BASE});
   // console.log("[Token will sent in createConv] " + token);
   return dispatch => {
     dispatch(convStart());
@@ -104,7 +109,8 @@ export const createConv = (peername) => {
 }
 
 export const sendMessage = (peername, sender, message) => {
-  const token = JSON.parse(localStorage.getItem("tokens"));
+  // const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = cookies.get("tokens", {path: routeTypes.BASE});
   return async (dispatch) => {
     //try {
       dispatch(convStart());  
@@ -113,7 +119,7 @@ export const sendMessage = (peername, sender, message) => {
         url: "/conversation/message",
         data: {
           receiver: peername,
-          sender: sender,
+          sender: sender, 
           content: message,
         },
         headers: {
