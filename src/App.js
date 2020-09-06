@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useCookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 import Layout from './components/layout/Layout';
 import * as actionsType from './config/store/actions/actionsType';
-
+import * as routeTypes from './config/router';
 
 
 const App = (props) => {
-  const [cookies] = useCookies(['tokens', 'username']);
-  console.log(cookies);
+  const cookies = new Cookies();
+  console.log(cookies.cookies);
 
   useEffect( () => {
-    const existingTokens = cookies["tokens"];
-    const existingUsername = cookies["username"];
+    const existingTokens = cookies.get("tokens");
+    const existingUsername = cookies.get("username");
     const fecthLogin = async () => {
       await props.onAuth(existingTokens, existingUsername);
     };

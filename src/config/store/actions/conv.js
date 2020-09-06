@@ -57,7 +57,7 @@ export const searchUsernameAPI = (peername) => {
 
 export const deleteConv = (peerName) => {
   // const token = JSON.parse(localStorage.getItem("tokens"));
-  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  const token = cookies.get("tokens");
   console.log("[Conversaiton will be deleted] " + peerName);
   return dispatch => {
     dispatch(convStart());
@@ -82,7 +82,7 @@ export const deleteConv = (peerName) => {
 
 export const createConv = (peername) => {
   // const token = JSON.parse(localStorage.getItem("tokens"));
-  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  const token = cookies.get("tokens");
   // console.log("[Token will sent in createConv] " + token);
   return dispatch => {
     dispatch(convStart());
@@ -110,7 +110,7 @@ export const createConv = (peername) => {
 
 export const sendMessage = (peername, sender, message) => {
   // const token = JSON.parse(localStorage.getItem("tokens"));
-  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  const token = cookies.get("tokens");
   return async (dispatch) => {
     //try {
       dispatch(convStart());  

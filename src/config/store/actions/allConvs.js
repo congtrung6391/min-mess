@@ -34,7 +34,7 @@ export const allConvsFail = (error) => {
 
 export const getAllConvs = () => {
   // const token = JSON.parse(localStorage.getItem("tokens"));
-  const token = cookies.get("tokens", {path: routeTypes.BASE});
+  const token = cookies.get("tokens");
   // console.log("[token will be sent in delete] " + token);
   return async (dispatch) => {
     dispatch(allConvsStart());

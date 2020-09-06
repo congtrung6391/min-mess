@@ -35,9 +35,9 @@ export const login = (data) => {
       data: data
     })
       .then(response => {
-        cookies.set("tokens", response.data.token, {path: routeTypes.BASE});
-        cookies.set("username", data.username, {path: routeTypes.BASE});
-        console.log(cookies);
+        cookies.set("tokens", response.data.token);
+        cookies.set("username", data.username);
+        console.log(cookies.get("tokens"));
         dispatch(authSucces(response.data.token, data.username));
       }) 
       .catch(error => {
@@ -56,8 +56,8 @@ export const register = (data) => {
       data: data
     })
       .then(response => {
-        cookies.set("tokens", response.data.token, {path: routeTypes.BASE});
-        cookies.set("username", data.username, {path: routeTypes.BASE});
+        cookies.set("tokens", response.data.token);
+        cookies.set("username", data.username);
         dispatch(authSucces(response.data.token, response.data.token));
       }) 
       .catch(error => {
@@ -70,8 +70,8 @@ export const logout = () => {
   return dispatch => {
     // localStorage.setItem("tokens", null);
     // localStorage.setItem("username", null); 
-    cookies.remove("tokens", {path: routeTypes.BASE});
-    cookies.remove("username", {path: routeTypes.BASE});
+    cookies.remove("tokens");
+    cookies.remove("username");
     dispatch(authFail(null));
   }
 }
