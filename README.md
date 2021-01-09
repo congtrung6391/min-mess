@@ -1,2 +1,2 @@
 # min-mess
-A simple chat app 
+Front-end part for a simple chat app.
